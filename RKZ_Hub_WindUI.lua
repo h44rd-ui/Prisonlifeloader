@@ -4,7 +4,26 @@
     By Elton
 ]]
 
-local WindUI = loadstring(game:HttpGet("https://github.com/Footagesus/WindUI/releases/latest/download/main.lua"))()
+local WindUI
+local winduiUrls = {
+    "https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua",
+    "https://github.com/Footagesus/WindUI/releases/latest/download/main.lua",
+    "https://raw.githubusercontent.com/Footagesus/WindUI/refs/heads/main/dist/main.lua",
+}
+
+for _, url in ipairs(winduiUrls) do
+    local ok, result = pcall(function()
+        return loadstring(game:HttpGet(url))()
+    end)
+    if ok and result and type(result) == "table" and result.CreateWindow then
+        WindUI = result
+        break
+    end
+end
+
+if not WindUI then
+    error("[RKZ Hub] Falha ao carregar WindUI. Verifique se seu executor permite HttpGet / loadstring.")
+end
 
 local Window = WindUI:CreateWindow({
     Title = "Painel Rkz | Paid version",
